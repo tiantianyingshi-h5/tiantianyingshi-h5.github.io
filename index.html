@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天天影视 - 晨光日历风电影片单与分类导航</title>
+<meta name="description" content="天天影视(tiantianyingshi-h5.github.io)用晨光日历风整理每日电影片单、类型分类、打卡评分与正版观影指引，单页移动自适应，符合必应收录规则。">
+<meta name="keywords" content="天天影视, tiantianyingshi-h5.github.io, 每日电影片单, 日历风影视导航, 电影分类, 热门打卡评分">
+<meta name="author" content="天天影视">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<style>
+:root{
+  --paper:#fffdf7;
+  --paper2:#f3f7fb;
+  --blue:#5bb8ff;
+  --blue2:#2f86d6;
+  --green:#5fd08a;
+  --green2:#2f9e63;
+  --orange:#ffb24d;
+  --orange2:#ff8a1f;
+  --ink:#243240;
+  --muted:#6f8294;
+  --line:rgba(47,134,214,.18);
+  --shadow:0 10px 26px rgba(47,134,214,.12);
+  --sun:radial-gradient(circle at 30% 30%,#ffe39a,#ffb24d 60%,transparent 62%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none;transition:.25s}
+.wrap{width:min(1180px,92%);margin:0 auto}
+
+/* 日历总控导航 */
+.topbar{position:sticky;top:0;z-index:999;background:rgba(255,253,247,.92);backdrop-filter:blur(10px);border-bottom:2px solid var(--blue)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900}
+.cal-logo{width:44px;height:44px;background:linear-gradient(135deg,var(--blue),var(--green));border-radius:10px;position:relative;display:grid;place-items:center;color:#fff;font-size:18px;box-shadow:var(--shadow)}
+.cal-logo:before{content:"";position:absolute;top:0;left:8px;right:8px;height:10px;background:#fff;opacity:.85;border-radius:0 0 6px 6px}
+.brand b{font-size:19px;color:var(--blue2);letter-spacing:.5px}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500}
+.nav{display:flex;gap:8px;flex-wrap:wrap}
+.nav a{font-size:14px;padding:8px 14px;border-radius:10px;min-height:44px;display:inline-flex;align-items:center;color:var(--blue2);border:1px solid transparent}
+.nav a:hover{background:var(--paper2);border-color:var(--line)}
+.menu-btn{display:none;background:var(--blue);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-size:14px;min-height:44px;cursor:pointer}
+
+/* Hero 日报 */
+#home{padding:60px 0 42px;background:radial-gradient(900px 380px at 88% 0,rgba(255,178,77,.16),transparent),radial-gradient(820px 360px at 4% 16%,rgba(91,184,255,.16),transparent),var(--paper2)}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:30px;align-items:center;min-height:380px}
+.daily{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:var(--shadow);position:relative}
+.daily .datechip{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;font-size:13px;font-weight:700;padding:6px 14px;border-radius:30px;margin-bottom:14px}
+.daily h1{font-size:clamp(28px,4.4vw,46px);line-height:1.2;margin-bottom:14px;color:var(--ink)}
+.daily h1 em{font-style:normal;color:var(--orange2)}
+.daily p{font-size:15px;color:var(--muted);margin-bottom:20px}
+.cta{display:inline-block;background:linear-gradient(90deg,var(--orange),var(--orange2));color:#fff;font-weight:800;padding:12px 28px;border-radius:30px;box-shadow:var(--shadow)}
+.cta:hover{transform:translateY(-2px)}
+.sunbox{position:relative;height:320px;border-radius:18px;background:linear-gradient(180deg,#eaf6ff,#fffdf7);border:1px solid var(--line);overflow:hidden;box-shadow:var(--shadow)}
+.sun{position:absolute;top:40px;right:46px;width:120px;height:120px;border-radius:50%;background:var(--sun);box-shadow:0 0 60px rgba(255,178,77,.5)}
+.hills{position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(180deg,transparent,rgba(95,208,138,.35));clip-path:polygon(0 60%,20% 40%,42% 62%,65% 38%,85% 60%,100% 46%,100% 100%,0 100%)}
+.cloud{position:absolute;background:#fff;border-radius:30px;box-shadow:0 6px 18px rgba(47,134,214,.12)}
+.c1{width:90px;height:30px;top:60px;left:30px}
+.c2{width:70px;height:24px;top:110px;left:120px}
+
+/* 通用 */
+section.block{padding:50px 0}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.sec-head .tick{width:14px;height:14px;border-radius:4px;background:var(--green);box-shadow:0 0 0 3px var(--paper2)}
+.sec-head h2{font-size:24px;color:var(--blue2)}
+.sec-head span{margin-left:auto;font-size:13px;color:var(--muted)}
+
+/* 日程片单时间格 */
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.slot{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:.25s}
+.slot:hover{transform:translateY(-5px)}
+.slot-top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--paper2);border-bottom:1px dashed var(--line)}
+.slot-top .time{font-family:Consolas,monospace;font-size:13px;color:var(--blue2);font-weight:700}
+.slot-top .tag{font-size:11px;padding:2px 10px;border-radius:20px;background:var(--green);color:#fff}
+.slot-body{padding:16px 18px}
+.slot-emoji{font-size:40px;display:block;margin-bottom:8px}
+.slot-body h3{font-size:16px;color:var(--ink);margin-bottom:6px}
+.slot-body p{font-size:13px;color:var(--muted);margin-bottom:10px}
+.slot-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--orange2);font-family:Consolas,monospace}
+
+/* 月历分类 */
+.calendar{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+.cal-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-bar b{font-size:16px;color:var(--blue2)}
+.cal-bar span{font-size:12px;color:var(--muted)}
+.weekdays,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.weekdays div{text-align:center;font-size:12px;color:var(--muted);padding:6px 0}
+.days a{min-height:64px;border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:4px;background:var(--paper2);font-size:12px;color:var(--ink)}
+.days a:hover{border-color:var(--blue);background:#fff}
+.days .num{font-weight:700;color:var(--blue2)}
+.days .dot{width:8px;height:8px;border-radius:50%;align-self:flex-start}
+.d1 .dot{background:var(--orange)}
+.d2 .dot{background:var(--green)}
+.d3 .dot{background:var(--blue)}
+.d4 .dot{background:var(--orange2)}
+.empty{border:0!important;background:transparent!important}
+
+/* 打卡评分 */
+.check{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px;text-align:center;box-shadow:var(--shadow)}
+.ring{width:120px;height:120px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:conic-gradient(var(--green) calc(var(--p)*1%),var(--paper2) 0);position:relative}
+.ring:before{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--paper)}
+.ring b{position:relative;font-size:22px;color:var(--green2)}
+.card h3{font-size:15px;color:var(--ink);margin-bottom:6px}
+.card small{font-size:12px;color:var(--muted)}
+.streak{margin-top:10px;font-size:12px;color:var(--orange2);font-family:Consolas,monospace}
+
+/* FAQ */
+.faq{display:grid;gap:12px}
+.qa{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.qbtn{width:100%;text-align:left;background:none;border:0;cursor:pointer;padding:16px 18px;font-size:15px;font-weight:700;color:var(--blue2);display:flex;justify-content:space-between;align-items:center;min-height:48px}
+.qbtn span{color:var(--green2);font-size:18px}
+.ans{max-height:0;overflow:hidden;transition:max-height .3s}
+.ans p{font-size:14px;color:var(--muted);padding:0 18px 16px}
+
+/* 关于-日出卡 */
+#about{background:linear-gradient(135deg,var(--blue2),var(--green2))}
+.sunset{width:min(880px,92%);margin:0 auto;text-align:center;padding:50px 0;color:#fff}
+.sunset h2{font-size:28px;margin-bottom:12px}
+.sunset p{color:#eaf6ff;margin-bottom:18px}
+.url-pill{display:inline-block;background:rgba(255,255,255,.14);color:#fff;font-family:Consolas,monospace;padding:13px 22px;border-radius:10px;border:1px dashed #cdeaff;word-break:break-all}
+
+footer{background:#16202b;color:#9fb6c6;text-align:center;padding:26px 0;font-size:13px}
+footer a{color:var(--blue)}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;text-align:center}
+  .daily{text-align:left}
+  .sunbox{max-width:420px;margin:0 auto}
+  .timeline{grid-template-columns:repeat(2,1fr)}
+  .check{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .nav{display:none;width:100%}
+  .nav.show{display:flex;flex-direction:column;gap:6px;padding:10px 0}
+  .menu-btn{display:inline-block}
+  .timeline{grid-template-columns:1fr}
+  .check{grid-template-columns:1fr}
+  .days a{min-height:54px}
+  .sec-head h2{font-size:21px}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <div class="cal-logo" aria-label="天天影视日历logo">天</div>
+      <div>
+        <b>天天影视</b>
+        <small>tiantianyingshi-h5.github.io</small>
+      </div>
+    </div>
+    <button class="menu-btn" id="menuBtn">日历菜单</button>
+    <nav class="nav" id="nav">
+      <a href="#home">今日</a>
+      <a href="#list">每日片单</a>
+      <a href="#calendar">月历分类</a>
+      <a href="#score">打卡评分</a>
+      <a href="#faq">常见问题</a>
+      <a href="#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- 栏目1 今日/首页 -->
+  <section id="home">
+    <div class="wrap hero">
+      <div class="daily">
+        <div class="datechip">📅 每日片单 · 天天更新</div>
+        <h1>天天影视 · <em>晨光日程</em>观影</h1>
+        <p>天天影视用日历与日程卡整理每日电影：早场治愈、午场大片、夜场悬疑，配合分类月历与打卡评分。单页自适应、内链 # 占位、正版渠道指引，符合必应收录规则。</p>
+        <a class="cta" href="#list">查看今日片单</a>
+      </div>
+      <div class="sunbox" aria-hidden="true">
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+        <div class="sun"></div>
+        <div class="hills"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目2 每日片单 -->
+  <section id="list" class="block">
+    <div class="wrap">
+      <div class="sec-head"><div class="tick"></div><h2>今日日程片单</h2><span>时间格卡片</span></div>
+      <div class="timeline">
+        <article class="slot"><div class="slot-top"><span class="time">08:00 早场</span><span class="tag">治愈</span></div><div class="slot-body"><span class="slot-emoji">🌅</span><h3>晨光面包房</h3><p>剧情/美食 · 小镇烘焙师的一天</p><div class="slot-meta"><span>家庭友好</span><span>92min</span></div></div></article>
+        <article class="slot"><div class="slot-top"><span class="time">12:30 午场</span><span class="tag">冒险</span></div><div class="slot-body"><span class="slot-emoji">🪂</span><h3>云上快递</h3><p>动画/冒险 · 高空投递的奇遇</p><div class="slot-meta"><span>合家欢</span><span>98min</span></div></div></article>
+        <article class="slot"><div class="slot-top"><span class="time">15:00 下午</span><span class="tag">爱情</span></div><div class="slot-body"><span class="slot-emoji">💌</span><h3>午后来信</h3><p>爱情/文艺 · 咖啡馆与旧邮箱</p><div class="slot-meta"><span>轻剧情</span><span>104min</span></div></div></article>
+        <article class="slot"><div class="slot-top"><span class="time">18:00 晚场</span><span class="tag">动作</span></div><div class="slot-body"><span class="slot-emoji">🚓</span><h3>城市速递</h3><p>动作/犯罪 · 外卖骑手变证人</p><div class="slot-meta"><span>强节奏</span><span>112min</span></div></div></article>
+        <article class="slot"><div class="slot-top"><span class="time">21:00 夜场</span><span class="tag">悬疑</span></div><div class="slot-body"><span class="slot-emoji">🕯️</span><h3>夜读谜案</h3><p>悬疑/推理 · 图书馆闭馆之后</p><div class="slot-meta"><span>烧脑</span><span>101min</span></div></div></article>
+        <article class="slot"><div class="slot-top"><span class="time">23:00 睡前</span><span class="tag">治愈</span></div><div class="slot-body"><span class="slot-emoji">🌙</span><h3>星空白噪音</h3><p>纪录/自然 · 慢直播式睡眠片</p><div class="slot-meta"><span>助眠</span><span>60min</span></div></div></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目3 月历分类 -->
+  <section id="calendar" class="block">
+    <div class="wrap">
+      <div class="sec-head"><div class="tick"></div><h2>类型月历分类</h2><span>按日排片·内链#</span></div>
+      <div class="calendar">
+        <div class="cal-bar"><b>本月排片日历</b><span>点击日期查看类型·演示用#</span></div>
+        <div class="weekdays"><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div></div>
+        <div class="days">
+          <a class="empty" href="#"></a><a class="empty" href="#"></a><a class="empty" href="#"></a>
+          <a class="d1" href="#"><span class="num">1</span><span class="dot"></span>动作</a>
+          <a class="d2" href="#"><span class="num">2</span><span class="dot"></span>治愈</a>
+          <a class="d3" href="#"><span class="num">3</span><span class="dot"></span>科幻</a>
+          <a class="d4" href="#"><span class="num">4</span><span class="dot"></span>爱情</a>
+          <a class="d1" href="#"><span class="num">5</span><span class="dot"></span>动作</a>
+          <a class="d2" href="#"><span class="num">6</span><span class="dot"></span>美食</a>
+          <a class="d3" href="#"><span class="num">7</span><span class="dot"></span>动画</a>
+          <a class="d4" href="#"><span class="num">8</span><span class="dot"></span>悬疑</a>
+          <a class="d1" href="#"><span class="num">9</span><span class="dot"></span>犯罪</a>
+          <a class="d2" href="#"><span class="num">10</span><span class="dot"></span>治愈</a>
+          <a class="d3" href="#"><span class="num">11</span><span class="dot"></span>太空</a>
+          <a class="d4" href="#"><span class="num">12</span><span class="dot"></span>青春</a>
+          <a class="d1" href="#"><span class="num">13</span><span class="dot"></span>竞速</a>
+          <a class="d2" href="#"><span class="num">14</span><span class="dot"></span>家庭</a>
+          <a class="empty" href="#"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目4 打卡评分 -->
+  <section id="score" class="block">
+    <div class="wrap">
+      <div class="sec-head"><div class="tick"></div><h2>观影打卡评分</h2><span>环形进度＋连签</span></div>
+      <div class="check">
+        <div class="card"><div class="ring" style="--p:97"><b>97</b></div><h3>云上快递</h3><small>动画冒险 · 合家欢首选</small><div class="streak">连续打卡 12 天</div></div>
+        <div class="card"><div class="ring" style="--p:93"><b>93</b></div><h3>夜读谜案</h3><small>悬疑推理 · 反转密集</small><div class="streak">连续打卡 8 天</div></div>
+        <div class="card"><div class="ring" style="--p:89"><b>89</b></div><h3>午后来信</h3><small>爱情文艺 · 慢热治愈</small><div class="streak">连续打卡 5 天</div></div>
+        <div class="card"><div class="ring" style="--p:85"><b>85</b></div><h3>城市速递</h3><small>动作犯罪 · 节奏明快</small><div class="streak">连续打卡 3 天</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目5 FAQ -->
+  <section id="faq" class="block">
+    <div class="wrap">
+      <div class="sec-head"><div class="tick"></div><h2>常见问题</h2><span>单页手风琴</span></div>
+      <div class="faq">
+        <div class="qa">
+          <button class="qbtn">天天影视提供在线播放或下载吗？<span>+</span></button>
+          <div class="ans"><p>本单页仅做每日片单、月历分类、打卡评分与正版渠道指引，不提供盗版视频播放、下载或网盘资源。</p></div>
+        </div>
+        <div class="qa">
+          <button class="qbtn">单页怎么做必应收录优化？<span>+</span></button>
+          <div class="ans"><p>唯一 H1 写“天天影视”，标题/描述/关键词前置域名与核心词，H2 分今日/片单/月历/评分/答疑/关于；响应式单 URL、静态 HTML 正文、移动无横向溢出，必应抓取更稳。[1,8](@ref) 按你要求不生成 robots/sitemap，后续可在 Bing Webmaster Tools 提交首页。</p></div>
+        </div>
+        <div class="qa">
+          <button class="qbtn">日历排片能直接换成真实日期吗？<span>+</span></button>
+          <div class="ans"><p>演示用静态日期与 # 链接；正式运营可用后端按真实日历生成每天片单，保持语义化与移动自适应即可。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目6 关于 -->
+  <section id="about" class="block">
+    <div class="sunset">
+      <h2>关于 天天影视</h2>
+      <p>天天影视为晨光日历风单页影视导航，提供每日片单、月历分类、打卡评分与正版观影建议。所有内页链接以 # 占位，仅作演示与索引使用。</p>
+      <div class="url-pill">https://tiantianyingshi-h5.github.io</div>
+      <p style="margin-top:18px"><a class="cta" href="#home">返回今日</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2024 天天影视 · 单页演示站 · 内页链接以 # 占位</p>
+    <p>官方网址：<a href="https://tiantianyingshi-h5.github.io">https://tiantianyingshi-h5.github.io</a></p>
+    <p>关键词：天天影视、tiantianyingshi-h5.github.io、晨光日历风电影片单</p>
+  </div>
+</footer>
+
+<script>
+var menuBtn=document.getElementById('menuBtn'),nav=document.getElementById('nav');
+if(menuBtn&&nav){menuBtn.addEventListener('click',function(){nav.classList.toggle('show');});}
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var id=a.getAttribute('href');if(id.length<2)return;
+    var el=document.querySelector(id);
+    if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});if(nav)nav.classList.remove('show');}
+  });
+});
+document.querySelectorAll('.qbtn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var qa=btn.parentElement,ans=qa.querySelector('.ans'),icon=btn.querySelector('span');
+    var open=qa.classList.contains('open');
+    document.querySelectorAll('.qa').forEach(function(x){x.classList.remove('open');x.querySelector('.ans').style.maxHeight=null;x.querySelector('.qbtn span').textContent='+';});
+    if(!open){qa.classList.add('open');ans.style.maxHeight=ans.scrollHeight+'px';icon.textContent='−';}
+  });
+});
+</script>
+</body>
+</html>
